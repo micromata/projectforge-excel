@@ -50,7 +50,7 @@ public class ExportConfig
     this.exportContext = exportContext;
   }
   
-  public void setPaperSize(String excelDefaultPaperSize)
+  public void setDefaultPaperSize(String excelDefaultPaperSize)
   {
     this.excelDefaultPaperSize = excelDefaultPaperSize;
   }
