@@ -34,7 +34,7 @@ import org.projectforge.common.BeanHelper;
 
 public class ExportRow
 {
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ExportRow.class);
+  private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExportRow.class);
 
   private ExportSheet sheet;
 

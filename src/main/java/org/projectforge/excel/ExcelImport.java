@@ -51,7 +51,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 public class ExcelImport<T>
 {
   /** The logger */
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ExcelImport.class);
+  private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExcelImport.class);
 
   /** the workbook containing the values. */
   private final HSSFWorkbook work;

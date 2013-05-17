@@ -45,7 +45,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExportWorkbook
 {
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ExportWorkbook.class);
+  private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExportWorkbook.class);
 
   private Workbook poiWorkbook;
 

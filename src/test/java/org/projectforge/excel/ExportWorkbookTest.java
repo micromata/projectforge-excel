@@ -32,7 +32,7 @@ import org.junit.Test;
 
 public class ExportWorkbookTest
 {
-  private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ExportWorkbookTest.class);
+  private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExportWorkbookTest.class);
 
   @Test
   public void exportExcel() throws IOException
