@@ -32,7 +32,7 @@ public interface ExportContext
    * @return the locale.
    */
   public Locale getLocale();
-  
+
   /**
    * You may set the locale manually.
    * @param locale
@@ -45,4 +45,10 @@ public interface ExportContext
    * @return The translated string with the locale.
    */
   public String getLocalizedString(String i18nKey);
+
+  /**
+   * The Excel date format to use for exporting dates and time-stamps.
+   * @return
+   */
+  public String getExcelDateFormat();
 }

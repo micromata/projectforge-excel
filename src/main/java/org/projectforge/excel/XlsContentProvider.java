@@ -35,6 +35,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.projectforge.common.DateFormatType;
 
 public class XlsContentProvider implements ContentProvider
 {
@@ -88,18 +89,27 @@ public class XlsContentProvider implements ContentProvider
 
   private final Map<Object, CellFormat> formatMap = new HashMap<Object, CellFormat>();
 
-  private final Map<Object, CellFormat> defaultFormatMap = new HashMap<Object, CellFormat>();
+  protected final Map<Object, CellFormat> defaultFormatMap = new HashMap<Object, CellFormat>();
 
   private final Map<Integer, Integer> colWidthMap = new HashMap<Integer, Integer>();
 
   private boolean autoFormatCells = true;
 
-  public XlsContentProvider(final ExportWorkbook workbook)
+  private ExportContext exportContext;
+
+  public XlsContentProvider(ExportContext exportContext, final ExportWorkbook workbook)
   {
+    this.exportContext = exportContext;
     this.workbook = workbook;
     createFonts();
     defaultFormatMap.put(Integer.class, new CellFormat("#,##0", CellStyle.ALIGN_RIGHT));
     defaultFormatMap.put(Number.class, new CellFormat("#,###.######", CellStyle.ALIGN_RIGHT));
+    defaultFormatMap
+        .put(Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MINUTES)));
+    defaultFormatMap.put(java.sql.Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.DATE)));
+    defaultFormatMap.put(java.sql.Timestamp.class,
+        new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MILLIS)));
+
   }
 
   public void updateSheetStyle(final ExportSheet sheet)
@@ -251,16 +261,22 @@ public class XlsContentProvider implements ContentProvider
         clazz = clazz.getSuperclass();
       }
     }
-    if (format == null) {
-      return null;
-    }
     CellFormat customizedCellFormat = getCustomizedCellFormat(format, value);
     if (customizedCellFormat != null) {
-      return customizedCellFormat;
+      format = customizedCellFormat;
+    }
+    if (format == null) {
+      return null;
     }
     return format.clone();
   }
 
+  /**
+   * Override this method for creating own cell formats.
+   * @param format May-be null if no mapping was found for the given value.
+   * @param value
+   * @return null at default.
+   */
   protected CellFormat getCustomizedCellFormat(CellFormat format, Object value)
   {
     return null;
@@ -305,10 +321,15 @@ public class XlsContentProvider implements ContentProvider
     }
 
   }
+  
+  public ExportContext getExportContext()
+  {
+    return exportContext;
+  }
 
   public ContentProvider newInstance()
   {
-    return new XlsContentProvider(this.workbook);
+    return new XlsContentProvider(this.exportContext, this.workbook);
   }
 
   private void createFonts()

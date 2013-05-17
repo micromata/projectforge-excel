@@ -60,4 +60,14 @@ public class DefaultExportContext implements ExportContext
   {
     return i18nKey;
   }
+  
+  /**
+   * Returns {@link ExcelDateFormats#EXCEL_DEFAULT_DATE}
+   * @see org.projectforge.excel.ExportContext#getExcelDateFormat()
+   */
+  @Override
+  public String getExcelDateFormat()
+  {
+    return ExcelDateFormats.EXCEL_DEFAULT_DATE;
+  }
 }

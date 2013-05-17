@@ -59,17 +59,19 @@ public class ExportWorkbook
 
   private Map<String, Short> dataFormats = new HashMap<String, Short>();
 
-  private ExportContext exportContext = new DefaultExportContext();
+  private ExportContext exportContext;
 
   public ExportWorkbook()
   {
     sheets = new ArrayList<ExportSheet>();
     poiWorkbook = new HSSFWorkbook();
+    exportContext = ExportConfig.getInstance().getDefaultExportContext();
   }
 
   public ExportWorkbook(final File excelFile) throws FileNotFoundException, IOException
   {
     poiWorkbook = new HSSFWorkbook(new FileInputStream(excelFile), true);
+    exportContext = ExportConfig.getInstance().getDefaultExportContext();
     int no = poiWorkbook.getNumberOfSheets();
     sheets = new ArrayList<ExportSheet>(no);
     for (int i = 0; i < no; i++) {
@@ -77,20 +79,6 @@ public class ExportWorkbook
       final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
       sheets.add(sheet);
     }
-  }
-
-  public ExportWorkbook setLocale(Locale locale)
-  {
-    this.exportContext.setLocale(locale);
-    return this;
-  }
-
-  /**
-   * If not set then the locale of the logged in user is taken.
-   */
-  public Locale getLocale()
-  {
-    return exportContext.getLocale();
   }
 
   /**
@@ -155,7 +143,7 @@ public class ExportWorkbook
     if (contentProvider != null) {
       cp = contentProvider;
     } else {
-      cp = new XlsContentProvider(this);
+      cp = ExportConfig.getInstance().createNewContentProvider(this);
     }
     ExportSheet sheet = new ExportSheet(cp, name, poiSheet);
     sheets.add(sheet);

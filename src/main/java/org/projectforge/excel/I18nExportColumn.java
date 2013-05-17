@@ -33,7 +33,7 @@ public class I18nExportColumn extends ExportColumn
    */
   public I18nExportColumn(final String name, final String i18nTitle, final int width)
   {
-    super(name, i18nTitle != null ? ExportConfig.getInstance().getExportContext().getLocalizedString(i18nTitle) : "", width);
+    super(name, i18nTitle != null ? ExportConfig.getInstance().getDefaultExportContext().getLocalizedString(i18nTitle) : "", width);
   }
 
   /**
@@ -43,6 +43,6 @@ public class I18nExportColumn extends ExportColumn
    */
   public I18nExportColumn(final Enum< ? > name, final String i18nTitle, final int width)
   {
-    super(name, i18nTitle != null ? ExportConfig.getInstance().getExportContext().getLocalizedString(i18nTitle) : "", width);
+    super(name, i18nTitle != null ? ExportConfig.getInstance().getDefaultExportContext().getLocalizedString(i18nTitle) : "", width);
   }
 }

@@ -25,36 +25,62 @@ package org.projectforge.excel;
 
 import org.apache.poi.ss.usermodel.PrintSetup;
 
-
 public class ExportConfig
 {
   private String excelDefaultPaperSize;
- 
-  private transient short excelDefaultPaperSizeValue = -42;
-  
-  private ExportContext exportContext = new DefaultExportContext();
 
-  private static final ExportConfig instance = new ExportConfig();
-  
-  public static ExportConfig getInstance() {
+  private transient short excelDefaultPaperSizeValue = -42;
+
+  private ExportContext defaultExportContext = new DefaultExportContext();
+
+  private static ExportConfig instance = new ExportConfig();
+
+  public static ExportConfig getInstance()
+  {
     return instance;
   }
-  
-  public ExportContext getExportContext()
+
+  public static void setInstance(ExportConfig exportConfig)
   {
-    return exportContext;
+    instance = exportConfig;
   }
 
-  public void setExportContext(ExportContext exportContext)
+  /**
+   * Override this method for own {@link XlsContentProvider}.
+   * @param workbook
+   * @return
+   */
+  protected ContentProvider createNewContentProvider(ExportWorkbook workbook)
   {
-    this.exportContext = exportContext;
+    return new XlsContentProvider(getDefaultExportContext(), workbook);
   }
-  
+
+  /**
+   * This context is used e. g. by I18nExportColumns to do internationalizations...
+   * @return default export context
+   */
+  public ExportContext getDefaultExportContext()
+  {
+    return defaultExportContext;
+  }
+
+  /**
+   * For using own ExportContext, otherwise {@link DefaultExportContext} is used. This context is used e. g. by I18nExportColumns to do
+   * internationalizations...
+   * @param exportContext
+   * @return this for chaining.
+   */
+  public ExportConfig setDefaultExportContext(ExportContext exportContext)
+  {
+    this.defaultExportContext = exportContext;
+    return this;
+  }
+
   public void setDefaultPaperSize(String excelDefaultPaperSize)
   {
     this.excelDefaultPaperSize = excelDefaultPaperSize;
   }
-  
+
   /**
    * Supported values "LETTER", default is "DINA4".
    * @return PrintSetup short value. Default is
@@ -72,6 +98,5 @@ public class ExportConfig
     }
     return excelDefaultPaperSizeValue;
   }
-
 
 }
