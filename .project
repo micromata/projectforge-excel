@@ -1,9 +1,7 @@
 <projectDescription>
   <name>projectforge-excel</name>
   <comment>ProjectForge is a multi user web application for collaborative team work. Organize time sheets, tasks, addresses, books etc. with project teams.</comment>
-  <projects>
-    <project>projectforge-common</project>
-  </projects>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
