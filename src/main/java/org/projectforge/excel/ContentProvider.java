@@ -23,40 +23,88 @@
 
 package org.projectforge.excel;
 
-
 public interface ContentProvider
 {
-  public void updateSheetStyle(ExportSheet sheet);
+  /**
+   * @param sheet
+   * @return this for chaining.
+   */
+  public ContentProvider updateSheetStyle(ExportSheet sheet);
 
-  public void updateRowStyle(ExportRow row);
+  /**
+   * @param row
+   * @return this for chaining.
+   */
+  public ContentProvider updateRowStyle(ExportRow row);
 
-  public void updateCellStyle(ExportCell cell);
+  /**
+   * @param cell
+   * @return this for chaining.
+   */
+  public ContentProvider updateCellStyle(ExportCell cell);
 
-  public void setValue(ExportCell cell, Object value);
+  /**
+   * @param cell
+   * @param value
+   * @return this for chaining.
+   */
+  public ContentProvider setValue(ExportCell cell, Object value);
 
-  public void setValue(ExportCell cell, Object value, String property);
+  /**
+   * @param cell
+   * @param value
+   * @param property
+   * @return this for chaining.
+   */
+  public ContentProvider setValue(ExportCell cell, Object value, String property);
 
   /**
    * @param obj property name or class of the matching cells.
    * @param format The cell format to use for all matching cells.
+   * @return this for chaining.
    */
-  public void putFormat(Object obj, CellFormat cellFormat);
+  public ContentProvider putFormat(Object obj, CellFormat cellFormat);
 
-  public void putFormat(Enum< ? > col, CellFormat cellFormat);
+  /**
+   * @param col
+   * @param cellFormat
+   * @return this for chaining.
+   */
+  public ContentProvider putFormat(Enum< ? > col, CellFormat cellFormat);
 
   /**
    * Equivalent to: putFormat(obj, new CellFormat(format))
+   * @return this for chaining.
    * @see CellFormat#CellFormat(String)
    */
-  public void putFormat(Object obj, String dataFrmat);
+  public ContentProvider putFormat(Object obj, String dataFormat);
 
-  public void putFormat(Enum< ? > col, String dataFormat);
+  /**
+   * @param col
+   * @param dataFormat
+   * @return this for chaining.
+   */
+  public ContentProvider putFormat(Enum< ? > col, String dataFormat);
 
-  public void putFormat(String dataFormat, Enum< ? >... cols);
+  /**
+   * @param dataFormat
+   * @param cols
+   * @return this for chaining.
+   */
+  public ContentProvider putFormat(String dataFormat, Enum< ? >... cols);
 
-  public void putColWidth(int colIdx, int charLength);
+  /**
+   * @param colIdx
+   * @param charLength
+   * @return this for chaining.
+   */
+  public ContentProvider putColWidth(int colIdx, int charLength);
 
-  public void setColWidths(int... charLengths);
+  /**
+   * @param charLengths
+   * @return this for chaining.
+   */
+  public ContentProvider setColWidths(int... charLengths);
 
   /**
    * Creates a new instance. This is usefull because every sheet of the workbook should have its own content provider (regarding col widths,

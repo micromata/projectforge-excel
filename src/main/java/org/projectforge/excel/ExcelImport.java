@@ -72,12 +72,13 @@ public class ExcelImport<T>
   private ClassFactory<T> clazzFactory;
 
   /**
-   * Opens a given Excel-document.
+   * Opens a given Excel-document. The stream is always closed.
    * @param xlsStream the stream of the Excel-document.
    * @throws IOException if the document is not readable
    */
   public ExcelImport(final InputStream xlsStream) throws IOException
   {
+    // Closed by HSSFWorkbook
     work = new HSSFWorkbook(xlsStream);
   }
 
@@ -246,8 +247,8 @@ public class ExcelImport<T>
    * @throws InvocationTargetException if the object creation fails with an exception or the setter threw an exception.
    * @throws NoSuchMethodException if the setter for the property name is not existant.
    */
-  private T convertToBean(final HSSFRow row, final HSSFRow columnNames, final int rowNum) throws InstantiationException, IllegalAccessException,
-  InvocationTargetException, NoSuchMethodException
+  private T convertToBean(final HSSFRow row, final HSSFRow columnNames, final int rowNum) throws InstantiationException,
+      IllegalAccessException, InvocationTargetException, NoSuchMethodException
   {
     if (row == null) {
       log.debug("created no bean for row#" + rowNum);

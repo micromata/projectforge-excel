@@ -112,11 +112,13 @@ public class XlsContentProvider implements ContentProvider
 
   }
 
-  public void updateSheetStyle(final ExportSheet sheet)
+  @Override
+  public XlsContentProvider updateSheetStyle(final ExportSheet sheet)
   {
     for (final Map.Entry<Integer, Integer> entry : colWidthMap.entrySet()) {
       sheet.setColumnWidth(entry.getKey(), entry.getValue());
     }
+    return this;
   }
 
   /**
@@ -132,7 +134,8 @@ public class XlsContentProvider implements ContentProvider
    * Highlights even and odd rows and sets first column bold if even and odd rows are configured.
    * @see org.projectforge.excel.ContentProvider#updateRowStyle(org.projectforge.excel.ExportRow)
    */
-  public void updateRowStyle(final ExportRow row)
+  @Override
+  public XlsContentProvider updateRowStyle(final ExportRow row)
   {
     if (autoFormatCells == true) {
       for (final ExportCell cell : row.getCells()) {
@@ -155,9 +158,11 @@ public class XlsContentProvider implements ContentProvider
         }
       }
     }
+    return this;
   }
 
-  public void updateCellStyle(final ExportCell cell)
+  @Override
+  public XlsContentProvider updateCellStyle(final ExportCell cell)
   {
     final CellFormat format = cell.ensureAndGetCellFormat();
     CellStyle cellStyle = reusableCellFormats.get(format);
@@ -180,11 +185,14 @@ public class XlsContentProvider implements ContentProvider
       }
     }
     cell.setCellStyle(cellStyle);
+    return this;
   }
 
-  public void setValue(final ExportCell cell, final Object value)
+  @Override
+  public XlsContentProvider setValue(final ExportCell cell, final Object value)
   {
     setValue(cell, value, null);
+    return this;
   }
 
   /**
@@ -201,7 +209,8 @@ public class XlsContentProvider implements ContentProvider
   /**
    * 
    */
-  public void setValue(final ExportCell cell, final Object value, final String property)
+  @Override
+  public XlsContentProvider setValue(final ExportCell cell, final Object value, final String property)
   {
     final Cell poiCell = cell.getPoiCell();
     Object customizedValue = getCustomizedValue(value);
@@ -239,6 +248,7 @@ public class XlsContentProvider implements ContentProvider
       cellFormat.setWrapText(true);
     }
     cell.setCellFormat(cellFormat);
+    return this;
   }
 
   /**
@@ -282,46 +292,59 @@ public class XlsContentProvider implements ContentProvider
     return null;
   }
 
-  public void putFormat(final Object obj, final CellFormat cellFormat)
+  @Override
+  public XlsContentProvider putFormat(final Object obj, final CellFormat cellFormat)
   {
     formatMap.put(obj, cellFormat);
+    return this;
   }
 
-  public void putFormat(final Enum< ? > col, final CellFormat cellFormat)
+  @Override
+  public XlsContentProvider putFormat(final Enum< ? > col, final CellFormat cellFormat)
   {
     putFormat(col.name(), cellFormat);
+    return this;
   }
 
-  public void putFormat(final Object obj, final String dataFormat)
+  @Override
+  public XlsContentProvider putFormat(final Object obj, final String dataFormat)
   {
     formatMap.put(obj, new CellFormat(dataFormat));
+    return this;
   }
 
-  public void putFormat(final Enum< ? > col, final String dataFormat)
+  @Override
+  public XlsContentProvider putFormat(final Enum< ? > col, final String dataFormat)
   {
     putFormat(col.name(), dataFormat);
+    return this;
   }
 
-  public void putFormat(final String dataFormat, final Enum< ? >... cols)
+  @Override
+  public XlsContentProvider putFormat(final String dataFormat, final Enum< ? >... cols)
   {
     for (final Enum< ? > col : cols) {
       putFormat(col, dataFormat);
     }
+    return this;
   }
 
-  public void putColWidth(final int colIdx, final int charLength)
+  @Override
+  public XlsContentProvider putColWidth(final int colIdx, final int charLength)
   {
     this.colWidthMap.put(colIdx, charLength * LENGHT_UNIT);
+    return this;
   }
 
-  public void setColWidths(final int... charLengths)
+  @Override
+  public XlsContentProvider setColWidths(final int... charLengths)
   {
     for (int colIdx = 0; colIdx < charLengths.length; colIdx++) {
       putColWidth(colIdx, charLengths[colIdx]);
     }
-
+    return this;
   }
-  
+
   public ExportContext getExportContext()
   {
     return exportContext;
