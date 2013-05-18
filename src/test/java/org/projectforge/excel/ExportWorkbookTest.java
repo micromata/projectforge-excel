@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -39,11 +41,15 @@ public class ExportWorkbookTest
   {
     final ExportWorkbook workbook = new ExportWorkbook();
     final ExportSheet sheet = workbook.addSheet("Test");
-    sheet.getContentProvider().setColWidths(20, 20, 20);
-    sheet.addRow().setValues("Type", "Precision", "result");
-    sheet.addRow().setValues("Java output", ".", "Tue Sep 28 00:27:10 UTC 2010");
-    sheet.addRow().setValues("int", "-", 1234);
-    sheet.addRow().setValues("BigDecimal", "-", new BigDecimal("123123123.123123123123"));
+    sheet.getContentProvider().setColWidths(20, 20);
+    sheet.addRow().setValues("Type", "result");
+    sheet.addRow().setValues("String", "This is a text.");
+    sheet.addRow().setValues("int", 1234);
+    sheet.addRow().setValues("BigDecimal", new BigDecimal("1042.38"));
+    Date date = new Date();
+    sheet.addRow().setValues("Date", date);
+    sheet.addRow().setValues("SQL-Date", new java.sql.Date(date.getTime()));
+    sheet.addRow().setValues("Timestamp", new Timestamp(date.getTime()));
     final File file = new File("target/test-excel.xls");
     log.info("Writing Excel test sheet to work directory: " + file.getAbsolutePath());
     workbook.write(new FileOutputStream(file));
