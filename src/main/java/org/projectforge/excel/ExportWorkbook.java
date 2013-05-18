@@ -28,11 +28,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -59,25 +59,28 @@ public class ExportWorkbook
 
   private Map<String, Short> dataFormats = new HashMap<String, Short>();
 
-  private ExportContext exportContext;
-
   public ExportWorkbook()
   {
     sheets = new ArrayList<ExportSheet>();
     poiWorkbook = new HSSFWorkbook();
-    exportContext = ExportConfig.getInstance().getDefaultExportContext();
   }
 
   public ExportWorkbook(final File excelFile) throws FileNotFoundException, IOException
   {
-    poiWorkbook = new HSSFWorkbook(new FileInputStream(excelFile), true);
-    exportContext = ExportConfig.getInstance().getDefaultExportContext();
-    int no = poiWorkbook.getNumberOfSheets();
-    sheets = new ArrayList<ExportSheet>(no);
-    for (int i = 0; i < no; i++) {
-      final Sheet sh = poiWorkbook.getSheetAt(i);
-      final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
-      sheets.add(sheet);
+    InputStream is = null;
+    try {
+      poiWorkbook = new HSSFWorkbook(is = new FileInputStream(excelFile), true);
+      int no = poiWorkbook.getNumberOfSheets();
+      sheets = new ArrayList<ExportSheet>(no);
+      for (int i = 0; i < no; i++) {
+        final Sheet sh = poiWorkbook.getSheetAt(i);
+        final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
+        sheets.add(sheet);
+      }
+    } finally {
+      if (is != null) {
+        is.close();
+      }
     }
   }
 
@@ -93,7 +96,7 @@ public class ExportWorkbook
   }
 
   /**
-   * Calls updateStyles first.
+   * Calls updateStyles first. The OutputStream will be closed by this method.
    * @param out
    * @throws IOException
    * @see #updateStyles()
@@ -101,12 +104,16 @@ public class ExportWorkbook
   public void write(OutputStream out) throws IOException
   {
     updateStyles();
-    poiWorkbook.write(out);
-    if (log.isDebugEnabled() == true) {
-      log.info("Excel sheet exported: number of cell styles="
-          + this.numberOfCellStyles
-          + ", number of data formats="
-          + this.numberOfDataFormats);
+    try {
+      poiWorkbook.write(out);
+      if (log.isDebugEnabled() == true) {
+        log.info("Excel sheet exported: number of cell styles="
+            + this.numberOfCellStyles
+            + ", number of data formats="
+            + this.numberOfDataFormats);
+      }
+    } finally {
+      out.close();
     }
   }
 
