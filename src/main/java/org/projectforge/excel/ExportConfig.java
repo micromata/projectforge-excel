@@ -81,12 +81,17 @@ public class ExportConfig
     this.excelDefaultPaperSize = excelDefaultPaperSize;
   }
 
+  public String getDefaultPaperSize()
+  {
+    return this.excelDefaultPaperSize;
+  }
+
   /**
    * Supported values "LETTER", default is "DINA4".
    * @return PrintSetup short value. Default is
    * @see PrintSetup#A4_PAPERSIZE.
    */
-  public short getDefaultPaperSize()
+  public short getDefaultPaperSizeId()
   {
     if (excelDefaultPaperSizeValue != -42) {
       return excelDefaultPaperSizeValue;
