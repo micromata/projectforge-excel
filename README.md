@@ -61,7 +61,7 @@ You may use any other logging framework if you implement the LoggerBridge yourse
 ```xml
 <dependency>
   <groupId>org.projectforge</groupId>
-  <artifactId>projectforge-continuous-db</artifactId>
+  <artifactId>projectforge-excel</artifactId>
   <version>5.1.1-SNAPSHOT</version>
 </dependency>
 
