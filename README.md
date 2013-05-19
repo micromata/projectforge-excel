@@ -55,3 +55,20 @@ you may initialize it before using continuous-db:
 Logger.setLoggerBridge(new LoggerBridgeLog4j()); // Before the first log message
 ```
 You may use any other logging framework if you implement the LoggerBridge yourself.
+
+## Using maven
+### pom.xml (SNAPSHOT)
+```xml
+<dependency>
+  <groupId>org.projectforge</groupId>
+  <artifactId>projectforge-continuous-db</artifactId>
+  <version>5.1.1-SNAPSHOT</version>
+</dependency>
+
+<repository>
+  <id>org.projectforge.repo</id>
+  <name>ProjectForge</name>
+  <url>http://www.projectforge.org/nexus/content/repositories/ProjectForge-Snapshots</url>
+</repository>
+```
+
