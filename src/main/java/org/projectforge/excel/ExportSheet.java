@@ -69,7 +69,7 @@ public class ExportSheet
       }
     }
     final PrintSetup printSetup = getPrintSetup();
-    printSetup.setPaperSize(ExportConfig.getInstance().getDefaultPaperSize());
+    printSetup.setPaperSize(ExportConfig.getInstance().getDefaultPaperSizeId());
   }
 
   /**
