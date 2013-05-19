@@ -1,7 +1,7 @@
 projectforge-excel
 ==================
 
-Excel export package (convenient usage of POI) for exporting MS-Excel sheet with a few lines of code or modifiing existing MS-Excel sheets.
+Excel export package (convenient usage of Apache POI) for exporting MS-Excel sheet with a few lines of code or modifiing existing MS-Excel sheets.
 
 Under construction...
 
@@ -17,6 +17,35 @@ sheet.addRow().setValues("BigDecimal", new BigDecimal("1042.38"));
 sheet.addRow().setValues("Date", new Date());
 final File file = new File("test-excel.xls");
 workbook.write(new FileOutputStream(file));
+```
+
+## Creating Excel sheets from bean collections
+To be documented...
+
+## Modifiing existing Excel sheets
+To be documented...
+
+## Scripting (Groovy as example)
+ProjectForge's excel wrapper was designed for a very convenient usage inside Groovy scripts.
+To be documented...
+```java
+List userList = userDao.getList(filter)        // Get the user objects to export somewhere.
+xls = reportScriptingStorage.getFile("MyReport.xls") // Get existing xls file for modification.
+ExportWorkbook workbook = new ExportWorkbook(xls);// Use this xls file.
+ExportSheet sheet = workbook.addSheet("Users") // Adds a new sheet.
+sheet.contentProvider.colWidths = [10, 20]     // Sets column widths.
+sheet.propertyNames = ["username", "lastname"] // Defines properties of user beans to use.
+sheet.addRow().setCapitalizedValues(sheet.propertyNames)  // Add heading row.
+sheet.addRows(userList)                        // Add all users to this sheet.
+```
+
+## Using POI API directly
+You may use the POI API directly for accessing the whole functionality of POI. All wrapped POI elements are directly available:
+```java
+workbook.getPoiWorkbook();
+sheet.getPoiSheet();
+row.getPoiRow();
+cell.getPoiCell();
 ```
 
 ## Using log4j or other logging frameworks
