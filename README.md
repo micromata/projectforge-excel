@@ -30,7 +30,6 @@ ProjectForge's excel wrapper was designed for a very convenient usage inside Gro
 To be documented...
 ```java
 List userList = userDao.getList(filter)        // Get the user objects to export somewhere.
-
 xls = reportScriptingStorage.getFile("MyReport.xls") // Get existing xls file for modification.
 ExportWorkbook workbook = new ExportWorkbook(xls);// Use this xls file.
 ExportSheet sheet = workbook.addSheet("Users") // Adds a new sheet.
@@ -40,7 +39,7 @@ sheet.addRow().setCapitalizedValues(sheet.propertyNames)  // Add heading row.
 sheet.addRows(userList)                        // Add all users to this sheet.
 ```
 
-## Using POI api directly
+## Using POI API directly
 You may use the POI API directly for accessing the whole functionality of POI. All wrapped POI elements are directly available:
 ```java
 workbook.getPoiWorkbook();
