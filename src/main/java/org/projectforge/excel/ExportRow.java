@@ -232,4 +232,9 @@ public class ExportRow
     ExportCell cell = addCell(firstCol, value);
     return cell;
   }
+  
+  public Row getPoiRow()
+  {
+    return poiRow;
+  }
 }

@@ -213,4 +213,9 @@ public class ExportWorkbook
     ++this.numberOfDataFormats;
     return value;
   }
+  
+  public Workbook getPoiWorkbook()
+  {
+    return poiWorkbook;
+  }
 }
