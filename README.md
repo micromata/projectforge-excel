@@ -57,6 +57,9 @@ Logger.setLoggerBridge(new LoggerBridgeLog4j()); // Before the first log message
 You may use any other logging framework if you implement the LoggerBridge yourself.
 
 ## Using maven
+### pom.xml (stable)
+Cooming soon...
+
 ### pom.xml (SNAPSHOT)
 ```xml
 <dependency>
