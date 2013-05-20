@@ -23,6 +23,7 @@
 
 package org.projectforge.excel;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,6 +58,8 @@ public class ExportWorkbook
 
   private int numberOfDataFormats = 0;
 
+  private String filename;
+
   private Map<String, Short> dataFormats = new HashMap<String, Short>();
 
   public ExportWorkbook()
@@ -82,6 +85,35 @@ public class ExportWorkbook
         is.close();
       }
     }
+  }
+
+  public ExportWorkbook(final byte[] excelFile) throws FileNotFoundException, IOException
+  {
+    InputStream is = null;
+    try {
+      poiWorkbook = new HSSFWorkbook(is = new ByteArrayInputStream(excelFile), true);
+      int no = poiWorkbook.getNumberOfSheets();
+      sheets = new ArrayList<ExportSheet>(no);
+      for (int i = 0; i < no; i++) {
+        final Sheet sh = poiWorkbook.getSheetAt(i);
+        final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
+        sheets.add(sheet);
+      }
+    } finally {
+      if (is != null) {
+        is.close();
+      }
+    }
+  }
+
+  public void setFilename(String filename)
+  {
+    this.filename = filename;
+  }
+
+  public String getFilename()
+  {
+    return filename;
   }
 
   /**
@@ -213,7 +245,7 @@ public class ExportWorkbook
     ++this.numberOfDataFormats;
     return value;
   }
-  
+
   public Workbook getPoiWorkbook()
   {
     return poiWorkbook;
