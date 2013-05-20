@@ -106,11 +106,19 @@ public class ExportWorkbook
     }
   }
 
+  /**
+   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated Excel file.
+   * @param filename
+   */
   public void setFilename(String filename)
   {
     this.filename = filename;
   }
 
+  /**
+   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated Excel file.
+   * @return filename if given and set, otherwise null.
+   */
   public String getFilename()
   {
     return filename;
