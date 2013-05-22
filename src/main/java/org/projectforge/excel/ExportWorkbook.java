@@ -215,6 +215,26 @@ public class ExportWorkbook
     return null;
   }
 
+  /**
+   * Clones the current sheet.
+   * @see Workbook#cloneSheet(int)
+   */
+  public ExportSheet cloneSheet(int sheetNum)
+  {
+    ExportSheet originSheet = getSheet(sheetNum);
+    Sheet poiSheet = this.poiWorkbook.cloneSheet(sheetNum);
+    ContentProvider cp = getContentProvider();
+    if (contentProvider != null) {
+      cp = contentProvider;
+    } else {
+      cp = ExportConfig.getInstance().createNewContentProvider(this);
+    }
+    ExportSheet sheet = new ExportSheet(cp, poiSheet.getSheetName(), poiSheet);
+    sheet.setImported(originSheet.isImported());
+    sheets.add(sheet);
+    return sheet;
+  }
+
   public CellStyle createCellStyle()
   {
     ++numberOfCellStyles;
