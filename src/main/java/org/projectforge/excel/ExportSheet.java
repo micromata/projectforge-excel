@@ -52,6 +52,8 @@ public class ExportSheet
 
   private ContentProvider contentProvider;
 
+  private boolean imported;
+
   public ExportSheet(final ContentProvider contentProvider, final String name, final Sheet poiSheet)
   {
     this.contentProvider = contentProvider;
@@ -252,5 +254,18 @@ public class ExportSheet
   public Sheet getPoiSheet()
   {
     return poiSheet;
+  }
+
+  /**
+   * @return true if this sheet was imported by a file.
+   */
+  public boolean isImported()
+  {
+    return imported;
+  }
+
+  public void setImported(boolean imported)
+  {
+    this.imported = imported;
   }
 }
