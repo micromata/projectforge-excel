@@ -32,7 +32,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-
 public class ExportSheet
 {
   /** Sheet names are limited to this length */
@@ -63,7 +62,10 @@ public class ExportSheet
     if (lastRowNum > 0) {
       // poiSheet does already exists.
       for (int i = poiSheet.getFirstRowNum(); i < poiSheet.getLastRowNum(); i++) {
-        final Row poiRow = poiSheet.getRow(i);
+        Row poiRow = poiSheet.getRow(i);
+        if (poiRow == null) {
+          poiRow = poiSheet.createRow(i);
+        }
         final ExportRow row = new ExportRow(contentProvider, this, poiRow, i);
         rows.add(row);
       }
