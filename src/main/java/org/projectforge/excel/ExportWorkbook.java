@@ -70,33 +70,26 @@ public class ExportWorkbook
 
   public ExportWorkbook(final File excelFile) throws FileNotFoundException, IOException
   {
-    InputStream is = null;
-    try {
-      poiWorkbook = new HSSFWorkbook(is = new FileInputStream(excelFile), true);
-      int no = poiWorkbook.getNumberOfSheets();
-      sheets = new ArrayList<ExportSheet>(no);
-      for (int i = 0; i < no; i++) {
-        final Sheet sh = poiWorkbook.getSheetAt(i);
-        final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
-        sheets.add(sheet);
-      }
-    } finally {
-      if (is != null) {
-        is.close();
-      }
-    }
+    this(new FileInputStream(excelFile));
   }
 
   public ExportWorkbook(final byte[] excelFile) throws FileNotFoundException, IOException
   {
-    InputStream is = null;
+    this(new ByteArrayInputStream(excelFile));
+  }
+
+  public ExportWorkbook(final InputStream is) throws IOException
+  {
     try {
-      poiWorkbook = new HSSFWorkbook(is = new ByteArrayInputStream(excelFile), true);
+      poiWorkbook = new HSSFWorkbook(is, true);
       int no = poiWorkbook.getNumberOfSheets();
       sheets = new ArrayList<ExportSheet>(no);
       for (int i = 0; i < no; i++) {
         final Sheet sh = poiWorkbook.getSheetAt(i);
-        final ExportSheet sheet = new ExportSheet(null, poiWorkbook.getSheetName(i), sh);
+        XlsContentProvider cp = (XlsContentProvider) ExportConfig.getInstance().createNewContentProvider(this);
+        cp.setAutoFormatCells(false);
+        final ExportSheet sheet = new ExportSheet(cp, poiWorkbook.getSheetName(i), sh);
+        sheet.setImported(true);
         sheets.add(sheet);
       }
     } finally {
@@ -107,7 +100,8 @@ public class ExportWorkbook
   }
 
   /**
-   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated Excel file.
+   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated
+   * Excel file.
    * @param filename
    */
   public void setFilename(String filename)
@@ -116,7 +110,8 @@ public class ExportWorkbook
   }
 
   /**
-   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated Excel file.
+   * The file name is ignored by the ExportWorkbook itself. The file name should be used by the caller to create a name for the generated
+   * Excel file.
    * @return filename if given and set, otherwise null.
    */
   public String getFilename()
@@ -131,7 +126,10 @@ public class ExportWorkbook
   public void updateStyles()
   {
     for (ExportSheet sheet : sheets) {
-      sheet.updateStyles();
+      if (sheet.isImported() == false) {
+        // Don't update styles from imported files.
+        sheet.updateStyles();
+      }
     }
   }
 
