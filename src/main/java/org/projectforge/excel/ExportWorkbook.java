@@ -219,10 +219,11 @@ public class ExportWorkbook
    * Clones the current sheet.
    * @see Workbook#cloneSheet(int)
    */
-  public ExportSheet cloneSheet(int sheetNum)
+  public ExportSheet cloneSheet(int sheetNum, String name)
   {
     ExportSheet originSheet = getSheet(sheetNum);
     Sheet poiSheet = this.poiWorkbook.cloneSheet(sheetNum);
+    this.poiWorkbook.setSheetName(sheets.size(), name);
     ContentProvider cp = getContentProvider();
     if (contentProvider != null) {
       cp = contentProvider;
