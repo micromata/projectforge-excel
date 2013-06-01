@@ -187,6 +187,11 @@ public class ExportCell
     return cellFormat;
   }
 
+  public CellStyle getCellStyle()
+  {
+    return this.poiCell.getCellStyle();
+  }
+
   /**
    * Should only be called directly before the export. Please note: Excel does support only a limited number of different cell styles, so
    * re-use cell styles with same format.
@@ -198,12 +203,26 @@ public class ExportCell
     this.poiCell.setCellStyle(cellStyle);
     return this;
   }
-  
-  public CellStyle ensureAndGetCellStyle() {
+
+  public CellStyle ensureAndGetCellStyle()
+  {
     CellStyle cellStyle = this.poiCell.getCellStyle();
     if (cellStyle == null) {
       cellStyle = styleProvider.getWorkbook().createCellStyle();
     }
     return cellStyle;
+  }
+
+  /**
+   * Sets the data format of the poi cell. Use this method only if you modify existing cells of an existing workbook (loaded from file).
+   * @param dataFormat
+   * @return this for chaining.
+   */
+  public ExportCell setDataFormat(String dataFormat)
+  {
+    CellStyle cellStyle = ensureAndGetCellStyle();
+    final short df = styleProvider.getWorkbook().getDataFormat(dataFormat);
+    cellStyle.setDataFormat(df);
+    return this;
   }
 }
