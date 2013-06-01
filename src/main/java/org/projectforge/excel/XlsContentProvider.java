@@ -355,6 +355,12 @@ public class XlsContentProvider implements ContentProvider
     return new XlsContentProvider(this.exportContext, this.workbook);
   }
 
+  @Override
+  public ExportWorkbook getWorkbook()
+  {
+    return workbook;
+  }
+
   private void createFonts()
   {
     FONT_HEADER = workbook.createFont();

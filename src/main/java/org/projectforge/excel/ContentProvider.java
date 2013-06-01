@@ -112,4 +112,6 @@ public interface ContentProvider
    * @return
    */
   public ContentProvider newInstance();
+  
+  public ExportWorkbook getWorkbook();
 }
