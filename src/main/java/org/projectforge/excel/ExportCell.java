@@ -190,9 +190,20 @@ public class ExportCell
   /**
    * Should only be called directly before the export. Please note: Excel does support only a limited number of different cell styles, so
    * re-use cell styles with same format.
+   * @param cellStyle
+   * @return this for chaining.
    */
-  public void setCellStyle(CellStyle cellStyle)
+  public ExportCell setCellStyle(CellStyle cellStyle)
   {
     this.poiCell.setCellStyle(cellStyle);
+    return this;
+  }
+  
+  public CellStyle ensureAndGetCellStyle() {
+    CellStyle cellStyle = this.poiCell.getCellStyle();
+    if (cellStyle == null) {
+      cellStyle = styleProvider.getWorkbook().createCellStyle();
+    }
+    return cellStyle;
   }
 }
