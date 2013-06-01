@@ -236,6 +236,17 @@ public class ExportWorkbook
     return sheet;
   }
 
+  /**
+   * Remove the sheet at the given position.
+   * @param index
+   * @return this for chaining.
+   */
+  public ExportWorkbook removeSheetAt(int index)
+  {
+    this.poiWorkbook.removeSheetAt(index);
+    return this;
+  }
+
   public CellStyle createCellStyle()
   {
     ++numberOfCellStyles;
