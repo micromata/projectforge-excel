@@ -49,14 +49,24 @@ public class ExportCell
     this.col = col;
   }
 
-  public void setValue(Object value)
+  /**
+   * @param value
+   * @return this for chaining.
+   */
+  public ExportCell setValue(Object value)
   {
-    setValue(value, null);
+    return setValue(value, null);
   }
 
-  public void setValue(Object value, String property)
+  /**
+   * @param value
+   * @param property
+   * @return this for chaining.
+   */
+  public ExportCell setValue(Object value, String property)
   {
     styleProvider.setValue(this, value, property);
+    return this;
   }
 
   public double getNumericCellValue()
@@ -144,9 +154,24 @@ public class ExportCell
     return col;
   }
 
-  public void setCellFormat(CellFormat cellFormat)
+  /**
+   * @param cellFormat
+   * @return this for chaining.
+   */
+  public ExportCell setCellFormat(String cellFormat)
+  {
+    this.cellFormat = new CellFormat(cellFormat);
+    return this;
+  }
+
+  /**
+   * @param cellFormat
+   * @return this for chaining.
+   */
+  public ExportCell setCellFormat(CellFormat cellFormat)
   {
     this.cellFormat = cellFormat;
+    return this;
   }
 
   public CellFormat ensureAndGetCellFormat()
