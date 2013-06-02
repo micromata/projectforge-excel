@@ -31,17 +31,17 @@ import org.apache.poi.ss.usermodel.DateUtil;
 
 public class ExportCell
 {
-  private Cell poiCell;
+  private final Cell poiCell;
 
-  private int row;
+  private final int row;
 
-  private int col;
+  private final int col;
 
   private CellFormat cellFormat;
 
   private ContentProvider styleProvider;
 
-  public ExportCell(ContentProvider styleProvider, Cell poiCell, int row, int col)
+  public ExportCell(final ContentProvider styleProvider, final Cell poiCell, final int row, final int col)
   {
     this.styleProvider = styleProvider;
     this.poiCell = poiCell;
@@ -53,7 +53,7 @@ public class ExportCell
    * @param value
    * @return this for chaining.
    */
-  public ExportCell setValue(Object value)
+  public ExportCell setValue(final Object value)
   {
     return setValue(value, null);
   }
@@ -63,7 +63,7 @@ public class ExportCell
    * @param property
    * @return this for chaining.
    */
-  public ExportCell setValue(Object value, String property)
+  public ExportCell setValue(final Object value, final String property)
   {
     styleProvider.setValue(this, value, property);
     return this;
@@ -87,7 +87,7 @@ public class ExportCell
 
   public String getStringCellValue()
   {
-    Object obj = getCellValue();
+    final Object obj = getCellValue();
     if (obj == null) {
       return "";
     } else if (obj instanceof String) {
@@ -139,7 +139,7 @@ public class ExportCell
     return poiCell;
   }
 
-  public void setStyleProvider(ContentProvider styleProvider)
+  public void setStyleProvider(final ContentProvider styleProvider)
   {
     this.styleProvider = styleProvider;
   }
@@ -158,7 +158,7 @@ public class ExportCell
    * @param cellFormat
    * @return this for chaining.
    */
-  public ExportCell setCellFormat(String cellFormat)
+  public ExportCell setCellFormat(final String cellFormat)
   {
     this.cellFormat = new CellFormat(cellFormat);
     return this;
@@ -168,7 +168,7 @@ public class ExportCell
    * @param cellFormat
    * @return this for chaining.
    */
-  public ExportCell setCellFormat(CellFormat cellFormat)
+  public ExportCell setCellFormat(final CellFormat cellFormat)
   {
     this.cellFormat = cellFormat;
     return this;
@@ -198,7 +198,7 @@ public class ExportCell
    * @param cellStyle
    * @return this for chaining.
    */
-  public ExportCell setCellStyle(CellStyle cellStyle)
+  public ExportCell setCellStyle(final CellStyle cellStyle)
   {
     this.poiCell.setCellStyle(cellStyle);
     return this;
@@ -214,13 +214,26 @@ public class ExportCell
   }
 
   /**
+   * Excel shares the cell formats and the number of cell formats is limited. This method uses a new cell style!
+   * @return
+   */
+  public CellStyle cloneCellStyle() {
+    final CellStyle cellStyle = styleProvider.getWorkbook().createCellStyle();
+    final CellStyle origCellStyle = this.poiCell.getCellStyle();
+    if (origCellStyle != null) {
+      cellStyle.cloneStyleFrom(origCellStyle);
+    }
+    return cellStyle;
+  }
+
+  /**
    * Sets the data format of the poi cell. Use this method only if you modify existing cells of an existing workbook (loaded from file).
    * @param dataFormat
    * @return this for chaining.
    */
-  public ExportCell setDataFormat(String dataFormat)
+  public ExportCell setDataFormat(final String dataFormat)
   {
-    CellStyle cellStyle = ensureAndGetCellStyle();
+    final CellStyle cellStyle = ensureAndGetCellStyle();
     final short df = styleProvider.getWorkbook().getDataFormat(dataFormat);
     cellStyle.setDataFormat(df);
     return this;
