@@ -214,7 +214,8 @@ public class ExportCell
   }
 
   /**
-   * Excel shares the cell formats and the number of cell formats is limited. This method uses a new cell style!
+   * Excel shares the cell formats and the number of cell formats is limited. This method uses a new cell style!<br/>
+   * Don't forget to call #setCellStyle(CellStyle) if you want to apply this cloned one.
    * @return
    */
   public CellStyle cloneCellStyle() {
