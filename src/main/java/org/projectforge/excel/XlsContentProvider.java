@@ -95,9 +95,14 @@ public class XlsContentProvider implements ContentProvider
 
   private boolean autoFormatCells = true;
 
-  private ExportContext exportContext;
+  private final ExportContext exportContext;
 
-  public XlsContentProvider(ExportContext exportContext, final ExportWorkbook workbook)
+  public XlsContentProvider(final ExportWorkbook workbook)
+  {
+    this(ExportConfig.getInstance().getDefaultExportContext(), workbook);
+  }
+
+  public XlsContentProvider(final ExportContext exportContext, final ExportWorkbook workbook)
   {
     this.exportContext = exportContext;
     this.workbook = workbook;
@@ -105,7 +110,7 @@ public class XlsContentProvider implements ContentProvider
     defaultFormatMap.put(Integer.class, new CellFormat("#,##0", CellStyle.ALIGN_RIGHT));
     defaultFormatMap.put(Number.class, new CellFormat("#,###.######", CellStyle.ALIGN_RIGHT));
     defaultFormatMap
-        .put(Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MINUTES)));
+    .put(Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MINUTES)));
     defaultFormatMap.put(java.sql.Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.DATE)));
     defaultFormatMap.put(java.sql.Timestamp.class,
         new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MILLIS)));
@@ -142,9 +147,9 @@ public class XlsContentProvider implements ContentProvider
         final CellFormat format = cell.ensureAndGetCellFormat();
         format.setFillForegroundColor(HSSFColor.WHITE.index);
         switch (row.getRowNum()) {
-        /*
-         * case 0: font = FONT_HEADER; break;
-         */
+          /*
+           * case 0: font = FONT_HEADER; break;
+           */
           case 0:
             format.setFont(FONT_NORMAL_BOLD);
             // alignment = CellStyle.ALIGN_CENTER;
@@ -201,7 +206,7 @@ public class XlsContentProvider implements ContentProvider
    * @param value
    * @return null at default.
    */
-  public Object getCustomizedValue(Object value)
+  public Object getCustomizedValue(final Object value)
   {
     return null;
   }
@@ -213,7 +218,7 @@ public class XlsContentProvider implements ContentProvider
   public XlsContentProvider setValue(final ExportCell cell, final Object value, final String property)
   {
     final Cell poiCell = cell.getPoiCell();
-    Object customizedValue = getCustomizedValue(value);
+    final Object customizedValue = getCustomizedValue(value);
     if (customizedValue != null) {
       if (customizedValue instanceof Calendar) {
         poiCell.setCellValue((Calendar) customizedValue);
@@ -271,7 +276,7 @@ public class XlsContentProvider implements ContentProvider
         clazz = clazz.getSuperclass();
       }
     }
-    CellFormat customizedCellFormat = getCustomizedCellFormat(format, value);
+    final CellFormat customizedCellFormat = getCustomizedCellFormat(format, value);
     if (customizedCellFormat != null) {
       format = customizedCellFormat;
     }
@@ -287,7 +292,7 @@ public class XlsContentProvider implements ContentProvider
    * @param value
    * @return null at default.
    */
-  protected CellFormat getCustomizedCellFormat(CellFormat format, Object value)
+  protected CellFormat getCustomizedCellFormat(final CellFormat format, final Object value)
   {
     return null;
   }
