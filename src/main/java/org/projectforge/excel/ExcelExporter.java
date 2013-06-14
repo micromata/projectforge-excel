@@ -112,16 +112,18 @@ public class ExcelExporter
       sheetProvider.putFormat(exportColumn, "#,##0.00;[Red]-#,##0.00");
       exportColumn.setWidth(10);
     } else if (type == PropertyType.DATE) {
-      // Get from config: sheetProvider.putFormat(InvoicesCol.DATE, "dd.MM.yyyy");
+      sheetProvider.putFormat(exportColumn, "MM/dd/yyyy");
     } else if (type == PropertyType.DATE_TIME) {
-      // Get from config: sheetProvider.putFormat(InvoicesCol.DATE, "dd.MM.yyyy");
+      sheetProvider.putFormat(exportColumn, "MM/dd/yyyy HH:mm");
     } else if (type == PropertyType.DATE_TIME_SECONDS) {
-      // Get from config: sheetProvider.putFormat(InvoicesCol.DATE, "dd.MM.yyyy");
+      sheetProvider.putFormat(exportColumn, "MM/dd/yyyy HH:mm:ss");
     } else if (type == PropertyType.DATE_TIME_MILLIS) {
-      // Get from config: sheetProvider.putFormat(InvoicesCol.DATE, "dd.MM.yyyy");
+      sheetProvider.putFormat(exportColumn, "MM/dd/yyyy HH:mm:ss.fff");
     } else if (type == PropertyType.UNSPECIFIED) {
       if (java.sql.Date.class.isAssignableFrom(field.getType()) == true) {
-        // Get from config: sheetProvider.putFormat(InvoicesCol.DATE, "dd.MM.yyyy");
+        sheetProvider.putFormat(exportColumn, "MM/dd/yyyy");
+      } else if (java.util.Date.class.isAssignableFrom(field.getType()) == true) {
+        sheetProvider.putFormat(exportColumn, "MM/dd/yyyy HH:mm");
       }
     }
   }
