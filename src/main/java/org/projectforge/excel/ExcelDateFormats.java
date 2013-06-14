@@ -57,11 +57,11 @@ public class ExcelDateFormats
     switch (format) {
       case DATE:
         return defaultExcelDateFormat;
-      case TIMESTAMP_MINUTES:
+      case DATE_TIME_MINUTES:
         return defaultExcelDateFormat + " hh:mm";
-      case TIMESTAMP_SECONDS:
+      case DATE_TIME_SECONDS:
         return defaultExcelDateFormat + " hh:mm:ss";
-      case TIMESTAMP_MILLIS:
+      case DATE_TIME_MILLIS:
         return defaultExcelDateFormat + " hh:mm:ss.000";
       default:
         return defaultExcelDateFormat + " hh:mm:ss";

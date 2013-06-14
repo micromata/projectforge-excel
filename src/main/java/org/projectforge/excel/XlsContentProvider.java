@@ -114,10 +114,10 @@ public class XlsContentProvider implements ContentProvider
     defaultFormatMap.put(Integer.class, new CellFormat("#,##0", CellStyle.ALIGN_RIGHT));
     defaultFormatMap.put(Number.class, new CellFormat("#,###.######", CellStyle.ALIGN_RIGHT));
     defaultFormatMap
-    .put(Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MINUTES)));
+    .put(Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.DATE_TIME_MINUTES)));
     defaultFormatMap.put(java.sql.Date.class, new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.DATE)));
     defaultFormatMap.put(java.sql.Timestamp.class,
-        new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.TIMESTAMP_MILLIS)));
+        new CellFormat(ExcelDateFormats.getExcelFormatString(exportContext, DateFormatType.DATE_TIME_MILLIS)));
 
   }
 
