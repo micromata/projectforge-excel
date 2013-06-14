@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+Nothi/////////////////////////////////////////////////////////////////////////////
 //
 // Project ProjectForge Community Edition
 //         www.projectforge.org
@@ -91,9 +91,9 @@ public class ExportSheet
     final ExportRow headRow = addRow();
     int idx = 0;
     for (final ExportColumn col : columns) {
-      headRow.addCell(idx, col.title);
-      colNames[idx] = col.name;
-      contentProvider.putColWidth(idx, col.width);
+      headRow.addCell(idx, col.getTitle());
+      colNames[idx] = col.getName();
+      contentProvider.putColWidth(idx, col.getWidth());
       ++idx;
     }
     setPropertyNames(colNames);
@@ -264,7 +264,7 @@ public class ExportSheet
     return imported;
   }
 
-  public void setImported(boolean imported)
+  public void setImported(final boolean imported)
   {
     this.imported = imported;
   }
