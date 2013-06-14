@@ -25,11 +25,11 @@ package org.projectforge.excel;
 
 public class ExportColumn
 {
-  final public String name;
+  private final String name;
 
-  final public String title;
+  private final String title;
 
-  final public int width;
+  private int width;
 
   public ExportColumn(final String name, final String title, final int width)
   {
@@ -43,5 +43,39 @@ public class ExportColumn
     this.name = name.name();
     this.title = title;
     this.width = width;
+  }
+
+  /**
+   * @return the name
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * @return the title
+   */
+  public String getTitle()
+  {
+    return title;
+  }
+
+  /**
+   * @return the width
+   */
+  public int getWidth()
+  {
+    return width;
+  }
+
+  /**
+   * @param width the width to set
+   * @return this for chaining.
+   */
+  public ExportColumn setWidth(final int width)
+  {
+    this.width = width;
+    return this;
   }
 }
