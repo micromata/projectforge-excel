@@ -26,6 +26,8 @@ package org.projectforge.excel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.ConvertUtils;
@@ -96,6 +98,8 @@ public class XlsContentProvider implements ContentProvider
   private boolean autoFormatCells = true;
 
   private final ExportContext exportContext;
+
+  private List<ExportColumn> columns;
 
   public XlsContentProvider(final ExportWorkbook workbook)
   {
@@ -269,6 +273,14 @@ public class XlsContentProvider implements ContentProvider
     if (property != null) {
       format = map.get(property);
     }
+    if (format == null && columns != null) {
+      for (final ExportColumn column : columns) {
+        if (column.getName().equals(property) == true) {
+          format = map.get(column);
+          break;
+        }
+      }
+    }
     if (format == null) {
       Class< ? > clazz = value == null ? null : value.getClass();
       while (format == null && clazz != null) {
@@ -326,6 +338,14 @@ public class XlsContentProvider implements ContentProvider
   }
 
   @Override
+  public XlsContentProvider putFormat(final ExportColumn col, final String dataFormat)
+  {
+    registerColumn(col);
+    putFormat((Object) col, dataFormat);
+    return this;
+  }
+
+  @Override
   public XlsContentProvider putFormat(final String dataFormat, final Enum< ? >... cols)
   {
     for (final Enum< ? > col : cols) {
@@ -347,6 +367,19 @@ public class XlsContentProvider implements ContentProvider
     for (int colIdx = 0; colIdx < charLengths.length; colIdx++) {
       putColWidth(colIdx, charLengths[colIdx]);
     }
+    return this;
+  }
+
+  /**
+   * @param columns the columns to set
+   * @return this for chaining.
+   */
+  private XlsContentProvider registerColumn(final ExportColumn column)
+  {
+    if (this.columns == null) {
+      this.columns = new LinkedList<ExportColumn>();
+    }
+    this.columns.add(column);
     return this;
   }
 

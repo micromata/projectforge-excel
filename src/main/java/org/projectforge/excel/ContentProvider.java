@@ -23,6 +23,7 @@
 
 package org.projectforge.excel;
 
+
 public interface ContentProvider
 {
   /**
@@ -87,6 +88,13 @@ public interface ContentProvider
   public ContentProvider putFormat(Enum< ? > col, String dataFormat);
 
   /**
+   * @param col
+   * @param dataFormat
+   * @return this for chaining.
+   */
+  public ContentProvider putFormat(ExportColumn col, String dataFormat);
+
+  /**
    * @param dataFormat
    * @param cols
    * @return this for chaining.
@@ -112,6 +120,6 @@ public interface ContentProvider
    * @return
    */
   public ContentProvider newInstance();
-  
+
   public ExportWorkbook getWorkbook();
 }
