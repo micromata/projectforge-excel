@@ -37,6 +37,8 @@ public class ExcelExporter
 
   private final ExportWorkbook workBook;
 
+  private int defaultColWidth = 20;
+
   public ExcelExporter(final String filename)
   {
     this.workBook = new ExportWorkbook();
@@ -51,12 +53,12 @@ public class ExcelExporter
       log.info("Nothing to export for sheet '" + sheetTitle + "'.");
       return sheet;
     }
-    final Class< ? > classType = list.get(0).getClass();
     // create a default Date format and currency column
     sheet.setContentProvider(sheetProvider);
 
     sheet.createFreezePane(0, 1);
 
+    final Class< ? > classType = list.get(0).getClass();
     final Field[] fields = PropUtils.getPropertyInfoFields(classType);
     final ExportColumn[] cols = new ExportColumn[fields.length];
     int i = 0;
@@ -66,7 +68,7 @@ public class ExcelExporter
         // Shouldn't occur.
         continue;
       }
-      final ExportColumn exportColumn = new I18nExportColumn(field.getName(), propInfo.i18nKey(), 20);// propInfo.lenght());
+      final ExportColumn exportColumn = new I18nExportColumn(field.getName(), propInfo.i18nKey(), defaultColWidth);
       cols[i++] = exportColumn;
       putFieldFormat(sheetProvider, field, propInfo, exportColumn);
     }
@@ -98,6 +100,16 @@ public class ExcelExporter
   }
 
   /**
+   * @param defaultColWidth the defaultColWidth to set
+   * @return this for chaining.
+   */
+  public ExcelExporter setDefaultColWidth(final int defaultColWidth)
+  {
+    this.defaultColWidth = defaultColWidth;
+    return this;
+  }
+
+  /**
    * Adds customized formats. Put here your customized formats to your ExportSheet.
    * @param field
    * @param propInfo may-be null.
@@ -124,6 +136,10 @@ public class ExcelExporter
         sheetProvider.putFormat(exportColumn, "MM/dd/yyyy");
       } else if (java.util.Date.class.isAssignableFrom(field.getType()) == true) {
         sheetProvider.putFormat(exportColumn, "MM/dd/yyyy HH:mm");
+      } else if (java.lang.Integer.class.isAssignableFrom(field.getType()) == true) {
+        exportColumn.setWidth(10);
+      } else if (java.lang.Boolean.class.isAssignableFrom(field.getType()) == true) {
+        exportColumn.setWidth(10);
       }
     }
   }
