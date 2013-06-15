@@ -45,17 +45,22 @@ public class ExcelExporter
     this.workBook.setFilename(filename);
   }
 
-  public <T> ExportSheet addSheet(final ContentProvider sheetProvider, final String sheetTitle, final List<T> list)
+  public ExportSheet addSheet(final ContentProvider sheetProvider, final String sheetTitle)
   {
     final ExportSheet sheet = workBook.addSheet(sheetTitle);
-    if (list == null || list.size() == 0) {
-      // Nothing to export.
-      log.info("Nothing to export for sheet '" + sheetTitle + "'.");
-      return sheet;
-    }
     // create a default Date format and currency column
     sheet.setContentProvider(sheetProvider);
+    return sheet;
+  }
 
+  public <T> ExportSheet addList(final ExportSheet sheet, final List<T> list)
+  {
+    if (list == null || list.size() == 0) {
+      // Nothing to export.
+      log.info("Nothing to export for sheet '" + sheet.getName() + "'.");
+      return sheet;
+    }
+    final ContentProvider sheetProvider = sheet.getContentProvider();
     sheet.createFreezePane(0, 1);
 
     final Class< ? > classType = list.get(0).getClass();
@@ -109,6 +114,11 @@ public class ExcelExporter
     return this;
   }
 
+  public void putFieldFormat(final ExportSheet sheet, final Field field, final PropertyInfo propInfo, final ExportColumn exportColumn)
+  {
+    putFieldFormat(sheet.getContentProvider(), field, propInfo, exportColumn);
+  }
+
   /**
    * Adds customized formats. Put here your customized formats to your ExportSheet.
    * @param field
@@ -116,13 +126,12 @@ public class ExcelExporter
    * @param column
    * @return true, if format is handled by this method, otherwise false.
    */
-  protected void putFieldFormat(final ContentProvider sheetProvider, final Field field, final PropertyInfo propInfo,
+  public void putFieldFormat(final ContentProvider sheetProvider, final Field field, final PropertyInfo propInfo,
       final ExportColumn exportColumn)
   {
     final PropertyType type = propInfo.type();
     if (type == PropertyType.CURRENCY) {
-      sheetProvider.putFormat(exportColumn, "#,##0.00;[Red]-#,##0.00");
-      exportColumn.setWidth(10);
+      putCurrencyFormat(sheetProvider, exportColumn);
     } else if (type == PropertyType.DATE) {
       sheetProvider.putFormat(exportColumn, "MM/dd/yyyy");
     } else if (type == PropertyType.DATE_TIME) {
@@ -142,5 +151,11 @@ public class ExcelExporter
         exportColumn.setWidth(10);
       }
     }
+  }
+
+  public void putCurrencyFormat(final ContentProvider sheetProvider, final ExportColumn exportColumn)
+  {
+    sheetProvider.putFormat(exportColumn, "#,##0.00;[Red]-#,##0.00");
+    exportColumn.setWidth(10);
   }
 }
