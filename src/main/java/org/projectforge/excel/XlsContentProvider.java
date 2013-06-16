@@ -228,6 +228,8 @@ public class XlsContentProvider implements ContentProvider
         poiCell.setCellValue((Calendar) customizedValue);
       } else if (customizedValue instanceof Date) {
         poiCell.setCellValue((Date) customizedValue);
+      } else if (customizedValue instanceof String) {
+        poiCell.setCellValue((String) customizedValue);
       } else {
         throw new UnsupportedOperationException("Type "
             + customizedValue.getClass()
