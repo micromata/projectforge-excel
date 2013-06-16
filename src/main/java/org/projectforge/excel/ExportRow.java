@@ -36,11 +36,11 @@ public class ExportRow
 {
   private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExportRow.class);
 
-  private ExportSheet sheet;
+  private final ExportSheet sheet;
 
-  private Row poiRow;
+  private final Row poiRow;
 
-  private Map<Integer, ExportCell> cellMap;
+  private final Map<Integer, ExportCell> cellMap;
 
   private ContentProvider contentProvider;
 
@@ -50,7 +50,7 @@ public class ExportRow
 
   private ExportCell[] cells;
 
-  public ExportRow(ContentProvider contentProvider, ExportSheet sheet, Row poiRow, int rowNum)
+  public ExportRow(final ContentProvider contentProvider, final ExportSheet sheet, final Row poiRow, final int rowNum)
   {
     this.contentProvider = contentProvider;
     this.sheet = sheet;
@@ -60,7 +60,7 @@ public class ExportRow
     if (poiRow.getLastCellNum() > 0) {
       // poiRow does already exists.
       for (int i = poiRow.getFirstCellNum(); i < poiRow.getLastCellNum(); i++) {
-        Cell poiCell = poiRow.getCell(i);
+        final Cell poiCell = poiRow.getCell(i);
         if (poiCell != null) {
           addPoiCell(i, poiCell);
         }
@@ -68,31 +68,31 @@ public class ExportRow
     }
   }
 
-  public ExportCell addCell(int col)
+  public ExportCell addCell(final int col)
   {
     return addCell(col, null, null);
   }
 
-  public ExportCell addCell(int col, Object value)
+  public ExportCell addCell(final int col, final Object value)
   {
     return addCell(col, value, null);
   }
 
-  public ExportCell addCell(int col, Object value, String property)
+  public ExportCell addCell(final int col, final Object value, final String property)
   {
-    Cell poiCell = poiRow.createCell(col);
-    ExportCell cell = addPoiCell(col, poiCell);
+    final Cell poiCell = poiRow.createCell(col);
+    final ExportCell cell = addPoiCell(col, poiCell);
     cell.setValue(value, property);
     return cell;
   }
 
-  public ExportCell addPoiCell(int col, Cell poiCell)
+  public ExportCell addPoiCell(final int col, final Cell poiCell)
   {
     if (poiCell == null) {
       throw new UnsupportedOperationException("poiCell should not be null.");
     }
-    ExportCell cell = new ExportCell(contentProvider, poiCell, rowNum, col);
-    cellMap.put((int) col, cell);
+    final ExportCell cell = new ExportCell(contentProvider, poiCell, rowNum, col);
+    cellMap.put(col, cell);
     if (col > maxCol) {
       maxCol = col;
       cells = null;
@@ -104,7 +104,7 @@ public class ExportRow
    * Gets only added cells, if the requested cell does not exist, null will be returned.
    * @param col
    */
-  public ExportCell getCell(int col)
+  public ExportCell getCell(final int col)
   {
     return getCells()[col];
   }
@@ -112,7 +112,7 @@ public class ExportRow
   public void fillBean(final Object bean, final String[] propertyNames, final int startCol)
   {
     int col = startCol;
-    for (String property : propertyNames) {
+    for (final String property : propertyNames) {
       Object value;
       if (bean instanceof Map< ? , ? >) {
         value = property == null ? bean : ((Map< ? , ? >) bean).get(property);
@@ -125,7 +125,7 @@ public class ExportRow
           } else {
             value = null;
           }
-        } catch (RuntimeException ex) {
+        } catch (final RuntimeException ex) {
           log.info("Can't load property " + property + " from bean " + bean + " (" + ex.getMessage() + ")");
           value = "N/A";
         }
@@ -139,7 +139,7 @@ public class ExportRow
    * If the sheet has not its own StyleProvider then the given StyleProvider will be used (if not null).
    * @param contentProvider Can be null.
    */
-  public void updateStyles(ContentProvider contentProvider)
+  public void updateStyles(final ContentProvider contentProvider)
   {
     ContentProvider cp = this.contentProvider;
     if (cp == null) {
@@ -149,7 +149,7 @@ public class ExportRow
       return;
     }
     cp.updateRowStyle(this);
-    for (ExportCell cell : getCells()) {
+    for (final ExportCell cell : getCells()) {
       if (cell != null) {
         cp.updateCellStyle(cell);
       }
@@ -172,24 +172,32 @@ public class ExportRow
     return cells;
   }
 
+  /**
+   * @return the maxCol
+   */
+  public int getMaxCol()
+  {
+    return maxCol;
+  }
+
   public int getRowNum()
   {
     return rowNum;
   }
 
-  public void setStyleProvider(ContentProvider contentProvider)
+  public void setStyleProvider(final ContentProvider contentProvider)
   {
     this.contentProvider = contentProvider;
   }
 
-  public void setValues(Object... values)
+  public void setValues(final Object... values)
   {
     setValuesFrom(0, values);
   }
 
-  public void setValuesFrom(int fromCol, Object... values)
+  public void setValuesFrom(int fromCol, final Object... values)
   {
-    for (Object value : values) {
+    for (final Object value : values) {
       addCell(fromCol++, value);
     }
   }
@@ -199,7 +207,7 @@ public class ExportRow
    * @param values
    * @see #setCapitalizedValuesFrom(int, String...)
    */
-  public void setCapitalizedValues(String... values)
+  public void setCapitalizedValues(final String... values)
   {
     setCapitalizedValuesFrom(0, values);
   }
@@ -211,9 +219,9 @@ public class ExportRow
    * @param values
    * @see StringUtils#capitalize(String)
    */
-  public void setCapitalizedValuesFrom(int fromCol, String... values)
+  public void setCapitalizedValuesFrom(int fromCol, final String... values)
   {
-    for (String value : values) {
+    for (final String value : values) {
       addCell(fromCol++, StringUtils.capitalize(value));
     }
   }
@@ -225,14 +233,14 @@ public class ExportRow
    * @param colTo
    * @param value
    */
-  public ExportCell setMergedRegion(int numberOfRows, int firstCol, int lastCol, Object value)
+  public ExportCell setMergedRegion(final int numberOfRows, final int firstCol, final int lastCol, final Object value)
   {
-    CellRangeAddress region = new CellRangeAddress(rowNum, rowNum + numberOfRows - 1, firstCol, lastCol);
+    final CellRangeAddress region = new CellRangeAddress(rowNum, rowNum + numberOfRows - 1, firstCol, lastCol);
     sheet.getPoiSheet().addMergedRegion(region);
-    ExportCell cell = addCell(firstCol, value);
+    final ExportCell cell = addCell(firstCol, value);
     return cell;
   }
-  
+
   public Row getPoiRow()
   {
     return poiRow;
