@@ -34,6 +34,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 public class ExportSheet
 {
+  private static final org.projectforge.common.Logger log = org.projectforge.common.Logger.getLogger(ExportWorkbook.class);
+
   /** Sheet names are limited to this length */
   public final static int MAX_XLS_SHEETNAME_LENGTH = 31;
 
@@ -254,6 +256,25 @@ public class ExportSheet
   public Sheet getPoiSheet()
   {
     return poiSheet;
+  }
+
+  /**
+   * Set auto-filter for the whole first row. Maximum number of supported cells is 26 (A1:Z1)! Must be called after adding the first row
+   * with all heading cells.
+   * @return this for chaining.
+   */
+  public ExportSheet setAutoFilter()
+  {
+    final ExportRow row = getRow(0);
+    int numberOfCols = row.getMaxCol();
+    if (numberOfCols > 26) {
+      log.warn("#setAutoFilter supports only up to 26 columns! " + numberOfCols + " exceeds 26.");
+      numberOfCols = 26;
+    }
+    getPoiSheet().setAutoFilter(
+        org.apache.poi.ss.util.CellRangeAddress.valueOf("A1:" + (Character.toString((char) ('A' + numberOfCols))) + "1"));
+
+    return this;
   }
 
   /**
