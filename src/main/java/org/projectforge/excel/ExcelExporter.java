@@ -114,7 +114,7 @@ public class ExcelExporter
   }
 
   /**
-   * Sort the columns by the given names and all other columns (not specified by names) will be appended in the order of origin list.
+   * Re-orders the columns by the given names and all other columns (not specified by names) will be appended in the order of origin list.
    * @param columns
    * @param names
    * @return A new list with sorted columns.
