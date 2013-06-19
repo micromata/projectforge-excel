@@ -119,7 +119,7 @@ public class ExcelExporter
    * @param names
    * @return A new list with sorted columns.
    */
-  protected List<ExportColumn> sortColumns(final List<ExportColumn> columns, final String... names)
+  protected List<ExportColumn> reorderColumns(final List<ExportColumn> columns, final String... names)
   {
     if (names == null || names.length == 0) {
       return columns;
