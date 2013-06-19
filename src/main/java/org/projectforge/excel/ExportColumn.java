@@ -31,6 +31,12 @@ public class ExportColumn
 
   private int width;
 
+  public ExportColumn(final String name, final String title)
+  {
+    this.name = name;
+    this.title = title;
+  }
+
   public ExportColumn(final String name, final String title, final int width)
   {
     this.name = name;

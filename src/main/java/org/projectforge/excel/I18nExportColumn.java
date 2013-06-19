@@ -29,6 +29,15 @@ public class I18nExportColumn extends ExportColumn
   /**
    * @param name
    * @param i18nTitle The i18n key of the title.
+   */
+  public I18nExportColumn(final String name, final String i18nTitle)
+  {
+    super(name, i18nTitle != null ? ExportConfig.getInstance().getDefaultExportContext().getLocalizedString(i18nTitle) : "");
+  }
+
+  /**
+   * @param name
+   * @param i18nTitle The i18n key of the title.
    * @param width
    */
   public I18nExportColumn(final String name, final String i18nTitle, final int width)
