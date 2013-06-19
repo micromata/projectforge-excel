@@ -24,6 +24,7 @@
 package org.projectforge.excel;
 
 import java.lang.reflect.Field;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.projectforge.common.BeanHelper;
@@ -43,6 +44,11 @@ public class ExcelExporter
   {
     this.workBook = new ExportWorkbook();
     this.workBook.setFilename(filename);
+  }
+
+  public String getFilename()
+  {
+    return this.workBook.getFilename();
   }
 
   public ExportSheet addSheet(final ContentProvider sheetProvider, final String sheetTitle)
@@ -65,8 +71,7 @@ public class ExcelExporter
 
     final Class< ? > classType = list.get(0).getClass();
     final Field[] fields = PropUtils.getPropertyInfoFields(classType);
-    final ExportColumn[] cols = new ExportColumn[fields.length];
-    int i = 0;
+    List<ExportColumn> cols = new LinkedList<ExportColumn>();
     for (final Field field : fields) {
       final PropertyInfo propInfo = field.getAnnotation(PropertyInfo.class);
       if (propInfo == null) {
@@ -74,9 +79,10 @@ public class ExcelExporter
         continue;
       }
       final ExportColumn exportColumn = new I18nExportColumn(field.getName(), propInfo.i18nKey(), defaultColWidth);
-      cols[i++] = exportColumn;
+      cols.add(exportColumn);
       putFieldFormat(sheetProvider, field, propInfo, exportColumn);
     }
+    cols = onBeforeSettingColumns(cols);
     // column property names
     sheet.setColumns(cols);
     final PropertyMapping mapping = new PropertyMapping();
@@ -88,12 +94,44 @@ public class ExcelExporter
           continue;
         }
         field.setAccessible(true);
-        mapping.add(field.getName(), BeanHelper.getFieldValue(entry, field));
+        addMapping(mapping, entry, field);
       }
+      addMappings(mapping, entry);
       sheet.addRow(mapping.getMapping(), 0);
     }
 
     return sheet;
+  }
+
+  /**
+   * You may manipulate the order or content of the columns here. Called by {@link #addList(ExportSheet, List)}.
+   * @param columns Build of the PropertyInfo annotations.
+   * @return the given columns.
+   */
+  protected List<ExportColumn> onBeforeSettingColumns(final List<ExportColumn> columns)
+  {
+    return columns;
+  }
+
+  /**
+   * Override this for modifying the object field values. Called by {@link #addList(ExportSheet, List)}.
+   * @param mapping
+   * @param entry The current entry of the list to add to the Excel sheet.
+   * @param field The field of the entry to add.
+   */
+  public void addMapping(final PropertyMapping mapping, final Object entry, final Field field)
+  {
+    mapping.add(field.getName(), BeanHelper.getFieldValue(entry, field));
+  }
+
+  /**
+   * Override this for adding additional mappings. Called by {@link #addList(ExportSheet, List)}.
+   * @param mapping
+   * @param entry The current entry of the list to add to the Excel sheet.
+   * @param field The field of the entry to add.
+   */
+  protected void addMappings(final PropertyMapping mapping, final Object entry)
+  {
   }
 
   /**
