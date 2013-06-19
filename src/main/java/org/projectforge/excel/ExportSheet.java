@@ -82,24 +82,46 @@ public class ExportSheet
    * Convenient method: Adds all column names, titles, width and adds a head row.
    * @param columns
    */
+  public void setColumns(final List<ExportColumn> columns)
+  {
+    if (columns == null) {
+      return;
+    }
+    // build all column names, title, widths from fixed and variable columns
+    final String[] colNames = new String[columns.size()];
+    final ExportRow headRow = addRow();
+    int idx = 0;
+    for (final ExportColumn col : columns) {
+      addHeadRowCell(headRow, col, colNames, idx++);
+    }
+    setPropertyNames(colNames);
+  }
+
+  /**
+   * Convenient method: Adds all column names, titles, width and adds a head row.
+   * @param columns
+   */
   public void setColumns(final ExportColumn... columns)
   {
     if (columns == null) {
       return;
     }
     // build all column names, title, widths from fixed and variable columns
-    final int numCols = columns.length;
-    final String[] colNames = new String[numCols];
+    final String[] colNames = new String[columns.length];
     final ExportRow headRow = addRow();
     int idx = 0;
     for (final ExportColumn col : columns) {
-      headRow.addCell(idx, col.getTitle());
-      colNames[idx] = col.getName();
-      contentProvider.putColWidth(idx, col.getWidth());
-      ++idx;
+      addHeadRowCell(headRow, col, colNames, idx++);
     }
     setPropertyNames(colNames);
   }
+
+  private void addHeadRowCell(final ExportRow headRow, final ExportColumn col, final String[] colNames, final int idx) {
+    headRow.addCell(idx, col.getTitle());
+    colNames[idx] = col.getName();
+    contentProvider.putColWidth(idx, col.getWidth());
+  }
+
 
   public PrintSetup getPrintSetup()
   {
