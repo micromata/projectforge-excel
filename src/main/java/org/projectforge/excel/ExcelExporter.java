@@ -82,7 +82,7 @@ public class ExcelExporter
       cols.add(exportColumn);
       putFieldFormat(sheetProvider, field, propInfo, exportColumn);
     }
-    cols = onBeforeSettingColumns(cols);
+    cols = onBeforeSettingColumns(sheetProvider, cols);
     // column property names
     sheet.setColumns(cols);
     final PropertyMapping mapping = new PropertyMapping();
@@ -108,8 +108,63 @@ public class ExcelExporter
    * @param columns Build of the PropertyInfo annotations.
    * @return the given columns.
    */
-  protected List<ExportColumn> onBeforeSettingColumns(final List<ExportColumn> columns)
+  protected List<ExportColumn> onBeforeSettingColumns(final ContentProvider sheetProvider, final List<ExportColumn> columns)
   {
+    return columns;
+  }
+
+  /**
+   * Sort the columns by the given names and all other columns (not specified by names) will be appended in the order of origin list.
+   * @param columns
+   * @param names
+   * @return A new list with sorted columns.
+   */
+  protected List<ExportColumn> sortColumns(final List<ExportColumn> columns, final String... names)
+  {
+    if (names == null || names.length == 0) {
+      return columns;
+    }
+    final List<ExportColumn> sortedList = new LinkedList<ExportColumn>();
+    for (final String name : names) {
+      for (final ExportColumn column : columns) {
+        if (name.equals(column.getName()) == true) {
+          sortedList.add(column);
+        }
+      }
+    }
+    for (final ExportColumn column : columns) {
+      boolean found = false;
+      for (final ExportColumn el : sortedList) {
+        if (el == column) {
+          found = true;
+          break;
+        }
+      }
+      if (found == false) {
+        sortedList.add(column);
+      }
+    }
+    return sortedList;
+  }
+
+  /**
+   * Remove the columns by the given names.
+   * @param columns
+   * @param names
+   */
+  protected List<ExportColumn> removeColumns(final List<ExportColumn> columns, final String... names)
+  {
+    if (names == null || names.length == 0) {
+      return columns;
+    }
+    for (final String name : names) {
+      for (final ExportColumn column : columns) {
+        if (name.equals(column.getName()) == true) {
+          columns.remove(column);
+          break;
+        }
+      }
+    }
     return columns;
   }
 
