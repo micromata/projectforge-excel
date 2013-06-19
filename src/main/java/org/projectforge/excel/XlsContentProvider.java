@@ -231,9 +231,7 @@ public class XlsContentProvider implements ContentProvider
       } else if (customizedValue instanceof String) {
         poiCell.setCellValue((String) customizedValue);
       } else {
-        throw new UnsupportedOperationException("Type "
-            + customizedValue.getClass()
-            + " not yet supported (must be implemented here, if supported by POI cell.");
+        poiCell.setCellValue(String.valueOf(customizedValue));
       }
     } else if (value instanceof Date) { // Attention: Time zone is not given!
       poiCell.setCellValue((Date) value);
