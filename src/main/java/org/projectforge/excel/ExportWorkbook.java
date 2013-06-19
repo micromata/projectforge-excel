@@ -60,7 +60,7 @@ public class ExportWorkbook
 
   private String filename;
 
-  private Map<String, Short> dataFormats = new HashMap<String, Short>();
+  private final Map<String, Short> dataFormats = new HashMap<String, Short>();
 
   public ExportWorkbook()
   {
@@ -82,11 +82,11 @@ public class ExportWorkbook
   {
     try {
       poiWorkbook = new HSSFWorkbook(is, true);
-      int no = poiWorkbook.getNumberOfSheets();
+      final int no = poiWorkbook.getNumberOfSheets();
       sheets = new ArrayList<ExportSheet>(no);
       for (int i = 0; i < no; i++) {
         final Sheet sh = poiWorkbook.getSheetAt(i);
-        XlsContentProvider cp = (XlsContentProvider) ExportConfig.getInstance().createNewContentProvider(this);
+        final XlsContentProvider cp = (XlsContentProvider) ExportConfig.getInstance().createNewContentProvider(this);
         cp.setAutoFormatCells(false);
         final ExportSheet sheet = new ExportSheet(cp, poiWorkbook.getSheetName(i), sh);
         sheet.setImported(true);
@@ -104,7 +104,7 @@ public class ExportWorkbook
    * Excel file.
    * @param filename
    */
-  public void setFilename(String filename)
+  public void setFilename(final String filename)
   {
     this.filename = filename;
   }
@@ -125,7 +125,7 @@ public class ExportWorkbook
    */
   public void updateStyles()
   {
-    for (ExportSheet sheet : sheets) {
+    for (final ExportSheet sheet : sheets) {
       if (sheet.isImported() == false) {
         // Don't update styles from imported files.
         sheet.updateStyles();
@@ -139,7 +139,7 @@ public class ExportWorkbook
    * @throws IOException
    * @see #updateStyles()
    */
-  public void write(OutputStream out) throws IOException
+  public void write(final OutputStream out) throws IOException
   {
     updateStyles();
     try {
@@ -160,14 +160,14 @@ public class ExportWorkbook
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       write(baos);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       log.fatal("Exception encountered " + ex, ex);
       throw new RuntimeException(ex);
     }
     return baos.toByteArray();
   }
 
-  public ExportSheet addSheet(String name)
+  public ExportSheet addSheet(final String name)
   {
     return addSheet(name, null);
   }
@@ -183,14 +183,14 @@ public class ExportWorkbook
     if (name.length() >= ExportSheet.MAX_XLS_SHEETNAME_LENGTH) {
       title = StringUtils.abbreviate(name, ExportSheet.MAX_XLS_SHEETNAME_LENGTH);
     }
-    Sheet poiSheet = poiWorkbook.createSheet(title);
+    final Sheet poiSheet = poiWorkbook.createSheet(title);
     ContentProvider cp = getContentProvider();
     if (contentProvider != null) {
       cp = contentProvider;
     } else {
       cp = ExportConfig.getInstance().createNewContentProvider(this);
     }
-    ExportSheet sheet = new ExportSheet(cp, name, poiSheet);
+    final ExportSheet sheet = new ExportSheet(cp, name, poiSheet);
     sheets.add(sheet);
     return sheet;
   }
@@ -205,9 +205,9 @@ public class ExportWorkbook
     return sheets.get(index);
   }
 
-  public ExportSheet getSheet(String name)
+  public ExportSheet getSheet(final String name)
   {
-    for (ExportSheet sheet : sheets) {
+    for (final ExportSheet sheet : sheets) {
       if (StringUtils.equals(sheet.getName(), name) == true) {
         return sheet;
       }
@@ -219,10 +219,10 @@ public class ExportWorkbook
    * Clones the current sheet.
    * @see Workbook#cloneSheet(int)
    */
-  public ExportSheet cloneSheet(int sheetNum, String name)
+  public ExportSheet cloneSheet(final int sheetNum, final String name)
   {
-    ExportSheet originSheet = getSheet(sheetNum);
-    Sheet poiSheet = this.poiWorkbook.cloneSheet(sheetNum);
+    final ExportSheet originSheet = getSheet(sheetNum);
+    final Sheet poiSheet = this.poiWorkbook.cloneSheet(sheetNum);
     this.poiWorkbook.setSheetName(sheets.size(), name);
     ContentProvider cp = getContentProvider();
     if (contentProvider != null) {
@@ -230,7 +230,7 @@ public class ExportWorkbook
     } else {
       cp = ExportConfig.getInstance().createNewContentProvider(this);
     }
-    ExportSheet sheet = new ExportSheet(cp, poiSheet.getSheetName(), poiSheet);
+    final ExportSheet sheet = new ExportSheet(cp, poiSheet.getSheetName(), poiSheet);
     sheet.setImported(originSheet.isImported());
     sheets.add(sheet);
     return sheet;
@@ -241,7 +241,7 @@ public class ExportWorkbook
    * @param index
    * @return this for chaining.
    */
-  public ExportWorkbook removeSheetAt(int index)
+  public ExportWorkbook removeSheetAt(final int index)
   {
     this.poiWorkbook.removeSheetAt(index);
     return this;
@@ -263,7 +263,7 @@ public class ExportWorkbook
     return poiWorkbook.getCreationHelper();
   }
 
-  public void setContentProvider(ContentProvider contentProvider)
+  public void setContentProvider(final ContentProvider contentProvider)
   {
     this.contentProvider = contentProvider;
   }
@@ -278,7 +278,7 @@ public class ExportWorkbook
     if (dataFormats.containsKey(format) == true) {
       return dataFormats.get(format);
     }
-    short value = getCreationHelper().createDataFormat().getFormat(format);
+    final short value = getCreationHelper().createDataFormat().getFormat(format);
     dataFormats.put(format, value);
     ++this.numberOfDataFormats;
     return value;
