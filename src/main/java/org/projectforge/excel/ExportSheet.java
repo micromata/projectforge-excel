@@ -189,6 +189,14 @@ public class ExportSheet
     return this.rows.get(row);
   }
 
+  /**
+   * @return the rowCounter
+   */
+  public int getRowCounter()
+  {
+    return rowCounter;
+  }
+
   public List<ExportRow> getRows()
   {
     return rows;
@@ -262,8 +270,10 @@ public class ExportSheet
 
   /**
    * Merges cells and sets the value.
-   * @param colFrom
-   * @param colTo
+   * @param firstRow
+   * @param lastRow
+   * @param firstCol
+   * @param lastCol
    * @param value
    */
   public ExportCell setMergedRegion(final int firstRow, final int lastRow, final int firstCol, final int lastCol, final Object value)
