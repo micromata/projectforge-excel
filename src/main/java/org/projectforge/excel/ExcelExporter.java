@@ -249,6 +249,6 @@ public class ExcelExporter
   public void putCurrencyFormat(final ContentProvider sheetProvider, final ExportColumn exportColumn)
   {
     sheetProvider.putFormat(exportColumn, "#,##0.00;[Red]-#,##0.00");
-    exportColumn.setWidth(10);
+    exportColumn.setWidth(12);
   }
 }
