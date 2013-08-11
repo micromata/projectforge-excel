@@ -58,14 +58,26 @@ You may use any other logging framework if you implement the LoggerBridge yourse
 
 ## Using maven
 ### pom.xml (stable)
-Cooming soon...
+```xml
+<dependency>
+  <groupId>org.projectforge</groupId>
+  <artifactId>projectforge-excel</artifactId>
+  <version>5.2</version>
+</dependency>
+
+<repository>
+  <id>org.projectforge.repo</id>
+  <name>ProjectForge</name>
+  <url>http://www.projectforge.org/nexus/content/repositories/ProjectForge</url>
+</repository>
+```
 
 ### pom.xml (SNAPSHOT)
 ```xml
 <dependency>
   <groupId>org.projectforge</groupId>
   <artifactId>projectforge-excel</artifactId>
-  <version>5.1.1-SNAPSHOT</version>
+  <version>5.2.1-SNAPSHOT</version>
 </dependency>
 
 <repository>
