@@ -248,9 +248,9 @@ public class ExportSheet
   }
 
   /**
-   * Freezes the first toRow lines and the first toCol columns.
-   * @param toRow
+   * Freezes the first toCol columns and the first toRow lines.
    * @param toCol
+   * @param toRow
    * @see Sheet#createFreezePane(int, int)
    */
   public void createFreezePane(final int toCol, final int toRow)
